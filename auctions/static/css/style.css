@@ -1,0 +1,136 @@
+/* Основные стили */
+:root {
+    --woocommerce: #a46497;
+    --wc-green: #7ad03a;
+    --wc-red: #a00;
+    --wc-orange: #ffba00;
+    --wc-blue: #2ea2cc;
+    --wc-primary: #a46497;
+    --wc-primary-text: white;
+    --wc-secondary: #ebe9eb;
+    --wc-secondary-text: #515151;
+    --wc-highlight: #77a464;
+    --wc-highligh-text: white;
+    --wc-content-bg: #fff;
+    --wc-subtext: #767676;
+}
+:root {
+    --woocommerce: #a46497;
+    --wc-green: #7ad03a;
+    --wc-red: #a00;
+    --wc-orange: #ffba00;
+    --wc-blue: #2ea2cc;
+    --wc-primary: #a46497;
+    --wc-primary-text: white;
+    --wc-secondary: #ebe9eb;
+    --wc-secondary-text: #515151;
+    --wc-highlight: #77a464;
+    --wc-highligh-text: white;
+    --wc-content-bg: #c1b696
+    --text: #4444;
+    --main-blue: #003366; /* Цвет логотипа */
+}
+html {
+    font-family: sans-serif;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    background-color: #e5e5e5;
+    padding: 1em 0;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+header nav ul li {
+    margin: 0 10px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header nav ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.btn-primary {
+    background-color: #800000;
+    border-color: #800000;
+}
+
+.btn-primary:hover {
+    background-color: #a00000;
+    border-color: #a00000;
+}
+.jumbotron {
+    background-image: url('/static/images/auction_bg.png'); /* Замените на ваш фон */
+    background-size: cover;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Основной синий цвет для логотипа и акцентов */
+:root {
+    --main-blue: #003366; /* Цвет логотипа */
+}
+
+.navbar-dark .navbar-brand img {
+    height: 50px;
+}
+
+.navbar-dark .nav-link {
+    color: var(--main-blue);
+    font-weight: bold;
+}
+
+.navbar-dark .nav-link:hover {
+    color: #0055a5; /* Ярче при наведении */
+}
+
+.card-title {
+    color: var(--main-blue);
+    font-weight: bold;
+}
+
+footer {
+    background-color: #002244;
+    color: #C0C0C0;
+}

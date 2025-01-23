@@ -1,0 +1,39 @@
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}
+    Лоты - {{ auction.title }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Лоты для аукциона: {{ auction.title }}</h1>
+    <p><strong>Описание:</strong> {{ auction.description }}</p>
+    <p><strong>Дата окончания:</strong> {{ auction.end_time }}</p>
+
+    <h2 class="mt-4">Доступные лоты</h2>
+    <div class="row">
+        {% for lot in lots %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if lot.images.all %}
+                    {% for image in lot.images.all %}
+                        <img src="{{ image.image.url }}" class="img-fluid mb-2" alt="{{ lot.title }}">
+                    {% endfor %}
+                {% else %}
+                    <p>Изображение отсутствует.</p>
+                {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ lot.title }}</h5>
+                        <p class="card-text">{{ lot.description|truncatechars:100 }}</p>
+                        <p><strong>Начальная цена:</strong> {{ lot.start_price }} KZT</p>
+                        <a href="{% url 'lot_detail' lot.id %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Для этого аукциона пока нет лотов.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

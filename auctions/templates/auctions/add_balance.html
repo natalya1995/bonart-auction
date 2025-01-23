@@ -1,0 +1,18 @@
+<!-- templates/auctions/add_balance.html -->
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}Пополнение Баланса{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    
+    <h2>Пополнить Баланс</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Пополнить</button>
+    </form>
+</div>
+{% endblock %}

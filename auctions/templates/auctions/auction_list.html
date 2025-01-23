@@ -1,0 +1,26 @@
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}
+    Список аукционов
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% for auction in auctions %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ auction.title }}</h5>
+                    <p class="card-text">{{ auction.description|truncatechars:150 }}</p>
+                    <p><strong>Начало:</strong> {{ auction.start_time }}</p>
+                    <p><strong>Окончание:</strong> {{ auction.end_time }}</p>
+                    <a href="{% url 'lots_by_auction' auction.id %}" class="btn btn-primary">Просмотреть лоты</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Пока нет активных аукционов.</p>
+    {% endfor %}
+</div>
+{% endblock %}

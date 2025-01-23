@@ -1,0 +1,55 @@
+<!-- templates/auctions/lot_detail.html -->
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}{{ lot.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        {% if lot.images.all %}
+            {% for image in lot.images.all %}
+                <img src="{{ image.image.url }}" class="img-fluid mb-2" alt="{{ lot.title }}">
+            {% endfor %}
+        {% else %}
+            <p>Изображение отсутствует.</p>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <h1>{{ lot.title }}</h1>
+        <p><strong>Описание:</strong> {{ lot.description }}</p>
+        <p><strong>Категория:</strong> {{ lot.get_category_display }}</p>
+        <p><strong>Начальная цена:</strong> {{ lot.start_price }} KZT</p>
+        <p><strong>Текущая цена:</strong> {{ lot.current_price|default:lot.start_price }} KZT</p>
+        <p><strong>Статус:</strong> {% if lot.is_sold %}Продан{% else %}Активен{% endif %}</p>
+
+        {% if lot.auction.is_closed %}
+        <div class="alert alert-danger">
+            Аукцион завершён. Ставки больше не принимаются.
+        </div>
+    {% else %}
+        {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="number" name="bid_amount" placeholder="Введите вашу ставку" required>
+                <button type="submit" class="btn btn-success">Сделать ставку</button>
+            </form>
+        {% else %}
+            <p>Пожалуйста, <a href="{% url 'login' %}">войдите</a>, чтобы сделать ставку.</p>
+        {% endif %}
+    {% endif %}
+    
+    </div>
+</div>
+
+<h3 class="mt-5">История ставок</h3>
+<ul class="list-group">
+    {% for bid in bids %}
+        <li class="list-group-item">
+            {{ bid.user.username }} — {{ bid.bid_amount }} KZT — {{ bid.get_status_display }} — {{ bid.bid_time|date:"d.m.Y H:i" }}
+        </li>
+    {% empty %}
+        <li class="list-group-item">Пока ставок нет.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

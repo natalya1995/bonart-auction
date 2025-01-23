@@ -1,0 +1,220 @@
+<!-- templates/auctions/profile.html -->
+
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}Мой Профиль{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Мой Профиль</h1>
+
+    <!-- Информация о пользователе -->
+<div class="card mb-4">
+    <div class="card-header"> 
+        <h5>Информация о пользователе</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>Имя:</strong> {{ user_profile.full_name }}</p>
+        <p><strong>Баланс:</strong> {{ user_profile.balance }} KZT</p>
+        <a href="{% url 'add_balance' %}" class="btn btn-primary">Пополнить баланс</a>
+        <a href="{% url 'connect_telegram' %}" class="btn btn-info">Подключить Telegram</a>
+    </div>
+</div>
+
+    
+
+    <!-- Мои Активные Ставки -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Мои Активные Ставки</h5>
+        </div>
+        <div class="card-body">
+            {% if active_bids %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Лот</th>
+                            <th>Ставка</th>
+                            <th>Дата</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bid in active_bids %}
+                        <tr>
+                            <td>{{ bid.lot.title }}</td>
+                            <td>{{ bid.bid_amount }} KZT</td>
+                            <td>{{ bid.bid_time|date:"d.m.Y H:i" }}</td>
+                            <td>Активная</td>
+                            <td>
+                                <!-- Пример действия: Отмена ставки -->
+                                <form action="{% url 'cancel_bid' bid.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Отменить</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>У вас нет активных ставок.</p>
+            {% endif %}
+        </div>
+    </div>
+
+   <!-- Мои Победившие Ставки -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Мои Победившие Ставки</h5>
+    </div>
+    <div class="card-body">
+        {% if winning_bids %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Лот</th>
+                    <th>Ставка</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bid in winning_bids %}
+                <tr>
+                    <td>{{ bid.lot.title }}</td>
+                    <td>{{ bid.bid_amount }} KZT</td>
+                    <td>{{ bid.bid_time|date:"d.m.Y H:i" }}</td>
+                    <td>Победившая</td>
+                    <td>
+                        {% if not bid.lot.is_sold %}
+                            <a href="{% url 'lot_payment' bid.lot.id %}" class="btn btn-success btn-sm">
+                                Оформить покупку
+                            </a>
+                        {% else %}
+                            <span class="text-success">Покупка оформлена</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>У вас нет победивших ставок.</p>
+        {% endif %}
+    </div>
+</div>
+    <!-- Мои Отклонённые Ставки -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Мои Отклонённые Ставки</h5>
+        </div>
+        <div class="card-body">
+            {% if losing_bids %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Лот</th>
+                            <th>Ставка</th>
+                            <th>Дата</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bid in losing_bids %}
+                        <tr>
+                            <td>{{ bid.lot.title }}</td>
+                            <td>{{ bid.bid_amount }} KZT</td>
+                            <td>{{ bid.bid_time|date:"d.m.Y H:i" }}</td>
+                            <td>Отклонена</td>
+                            <td>
+                                <!-- Пример действия: Повторить ставку -->
+                                <a href="{% url 'place_bid' bid.lot.id %}" class="btn btn-primary btn-sm">Повторить ставку</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>У вас нет отклонённых ставок.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Внесённые Депозиты -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Внесённые Депозиты</h5>
+        </div>
+        <div class="card-body">
+            {% if deposits %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Лот</th>
+                            <th>Сумма депозита</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for deposit in deposits %}
+                        <tr>
+                            <td>{{ deposit.lot.title }}</td>
+                            <td>{{ deposit.amount }} KZT</td>
+                            <td>
+                                {% if deposit.is_refunded %}
+                                    <span class="text-success">Возвращён</span>
+                                {% else %}
+                                    {% if deposit.status == 'completed' %}
+                                        <span class="text-primary">Завершён</span>
+                                    {% else %}
+                                        <span class="text-warning">В ожидании</span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>У вас нет внесённых депозитов.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- История Покупок -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>История Покупок</h5>
+        </div>
+        <div class="card-body">
+            {% if purchase_history %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Лот</th>
+                            <th>Сумма</th>
+                            <th>Дата покупки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lot in purchase_history %}
+                        <tr>
+                            <td>{{ lot.title }}</td>
+                            <td>{{ lot.current_price }} KZT</td>
+                            <td>{{ lot.payment_date|date:"d.m.Y H:i" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>У вас нет истории покупок.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

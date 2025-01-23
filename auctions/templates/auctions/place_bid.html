@@ -1,0 +1,27 @@
+<!-- templates/auctions/place_bid.html -->
+
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}Сделать ставку{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Сделать ставку на "{{ lot.title }}"</h1>
+    <p>{{ lot.description }}</p>
+    <p><strong>Текущая цена:</strong> {{ lot.current_price|default:"-"}} KZT</p>
+    <p><strong>Минимальная ставка:</strong> {{ lot.current_price|default:lot.start_price }} + {{ lot.auction.min_bid_increment }} = {{ lot.current_price|default:lot.start_price|add:lot.auction.min_bid_increment }} KZT</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сделать ставку</button>
+    </form>
+</div>
+{% endblock %}

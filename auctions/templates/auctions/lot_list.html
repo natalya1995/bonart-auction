@@ -1,0 +1,32 @@
+{% extends 'auctions/base.html' %}
+{% load static %}
+{% block title %}
+    Список лотов
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% for lot in lots %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if lot.lot_images.all %}
+            {% for image in lot.lot_images.all %}
+                <img src="{{ image.image.url }}" class="img-fluid mb-2" alt="{{ lot.title }}">
+            {% endfor %}
+        {% else %}
+            <p>Изображение отсутствует.</p>
+        {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ lot.title }}</h5>
+                    <p class="card-text">{{ lot.description|truncatechars:100 }}</p>
+                    <p><strong>Текущая цена:</strong> {{ lot.current_price|default:lot.start_price }} KZT</p>
+                    <p><strong>Категория:</strong> {{ lot.category }}</p>
+                    <a href="{% url 'lot_detail' lot.id %}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Лоты пока не добавлены.</p>
+    {% endfor %}
+</div>
+{% endblock %}

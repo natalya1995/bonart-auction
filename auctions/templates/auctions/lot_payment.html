@@ -1,0 +1,28 @@
+{% extends 'auctions/base.html' %}
+{% block title %}Оплата лота{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Оплата лота "{{ lot.title }}"</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Итоговая стоимость:</strong> {{ final_price }} KZT</p>
+            <p><strong>Депозит:</strong> {{ deposit_amount }} KZT</p>
+            <p><strong>Остаток к оплате:</strong> {{ remaining_amount }} KZT</p>
+
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Оплатить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!-- templates/auctions/pay_deposit.html -->
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}Оплата депозита{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Оплата депозита за лот "{{ lot.title }}"</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Стоимость лота:</strong> {{ lot.start_price }} KZT</p>
+            <p><strong>Депозит (10%):</strong> {{ deposit_amount }} KZT</p>
+
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %} 
+                <button type="submit" class="btn btn-primary">Оплатить депозит</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

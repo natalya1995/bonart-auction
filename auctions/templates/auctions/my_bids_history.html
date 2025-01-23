@@ -1,0 +1,39 @@
+<!-- templates/auctions/my_bids_history.html -->
+{% extends 'auctions/base.html' %}
+{% block title %}История Мои Ставки{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>История Мои Ставки</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Лот</th>
+                <th>Ставка</th>
+                <th>Дата</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bid, deposit in bids_with_deposits %}
+            <tr>
+                <td>{{ bid.lot.title }}</td>
+                <td>{{ bid.bid_amount }} KZT</td>
+                <td>{{ bid.bid_time|date:"d.m.Y H:i" }}</td>
+                <td>
+                    {% if bid.status == 'winner' %}
+                        Победившая
+                    {% else %}
+                        Отклонена
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Нет исторических ставок.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

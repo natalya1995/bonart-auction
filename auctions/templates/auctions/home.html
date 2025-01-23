@@ -1,0 +1,54 @@
+<!-- templates/auctions/home.html -->
+{% extends 'auctions/base.html' %}
+{% load static %}
+
+{% block title %}
+    BonArt Auction - Главная
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center py-5">
+    <img src="{% static 'images/bonart_logo_gold.png' %}" alt="BonArt Auction" height="100">
+    <h1 class="display-4 mt-3">Добро пожаловать в BonArt Auction!</h1>
+    <p class="lead">Участвуйте в уникальных аукционах и приобретайте произведения искусства.</p>
+    <hr class="my-4">
+    <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg">Зарегистрироваться</a>
+    <a href="{% url 'auction_list' %}" class="btn btn-outline-secondary btn-lg">Просмотреть аукционы</a>
+</div>
+
+<h2 class="mt-5 text-gold">Активные аукционы</h2>
+<div class="row">
+    {% for auction in active_auctions %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ auction.title }}</h5>
+                    <p class="card-text">{{ auction.description|truncatechars:100 }}</p>
+                    <p><strong>Окончание:</strong> {{ auction.end_time }}</p>
+                    <a href="{% url 'lots_by_auction' auction.id %}" class="btn btn-primary">Перейти к лотам</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Нет активных аукционов в данный момент.</p>
+    {% endfor %}
+</div>
+
+<h2 class="mt-5 text-muted">Завершённые аукционы</h2>
+<div class="row">
+    {% for auction in completed_auctions %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ auction.title }}</h5>
+                    <p class="card-text">{{ auction.description|truncatechars:100 }}</p>
+                    <p><strong>Статус:</strong> Завершено</p>
+                    <a href="{% url 'lots_by_auction' auction.id %}" class="btn btn-secondary">Посмотреть лоты</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Нет завершённых аукционов.</p>
+    {% endfor %}
+</div>
+{% endblock %}
